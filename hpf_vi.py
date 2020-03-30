@@ -111,6 +111,3 @@ class hpf_vi():
         # Note that the parameters tau_shp and k_shp are not updated in the algorithm, so they are declared here.
 
         self.phi = np.zeros(shape=[self.U, self.I, self.K])
-
-
-
