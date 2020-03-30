@@ -28,7 +28,7 @@ class hpf_vi():
 
     def fit(self, train, iterations):
         '''
-        Fit the Hirarchical Poisson Factorization model via Coordinate Ascent Variational Algorithm (CAVI)
+        Fit the Hierarchical Poisson Factorization model via Coordinate Ascent Variational Algorithm (CAVI)
         and generates the corresponding observation matrix based on the variational parameters.
         
         Parameters:
