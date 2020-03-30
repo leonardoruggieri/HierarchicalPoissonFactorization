@@ -24,25 +24,7 @@ class hpf_vi():
             - K : int
               dimensionality of latent attributes and preferences.
         '''
-        
-        # Hyperparameters (as suggested in Gopalan et al. 2013)
         self.a, self.c, self.a1, self.b1, self.c1, self.d1, self.K = a, c, a1, b1, c1, d1, K
-
-        # Dataset dimensions
-        self.U, self.I = ratings_toy.shape
-
-        self.gamma_shp = np.random.uniform(0,1, size = (self.U, self.K)) + self.a
-        self.gamma_rte = np.repeat(self.a/self.b1,self.K) + np.random.uniform(0,1, size = (self.U, self.K))
-        self.k_rte = self.a1/self.b1 + np.random.uniform(0,1, self.U)
-        self.k_shp = self.a1 + self.K*self.a
-
-        self.lambda_shp = np.random.uniform(0,1, size = (self.I, self.K)) + self.c
-        self.lambda_rte = np.repeat(self.c/self.d1,self.K) + np.random.uniform(0,1, size = (self.I, self.K))
-        self.tau_rte = self.c1/self.d1 + np.random.uniform(0,1, self.I)
-        self.tau_shp = self.c1 + self.K*self.c
-        # Note that the parameters tau_shp and k_shp are not updated in the algorithm, so they are declared here.
-
-        self.phi = np.zeros(shape=[self.U, self.I, self.K])
 
     def fit(self, train, iterations):
         '''
@@ -56,7 +38,12 @@ class hpf_vi():
             - iterations: int
               number of desired training epochs.
         '''
+        # Dataset dimensions
+        self.U, self.I = train.shape
+
+        self.initialize()
         
+
         import time
         tic = time.clock()
         for iter in range(iterations):
@@ -110,3 +97,20 @@ class hpf_vi():
                     recomm.append(i)
             if [i > 0 for i in recomm]:
                 print(f"User {u} may also like these items: {recomm}")
+
+    def initialize(self):
+        self.gamma_shp = np.random.uniform(0,1, size = (self.U, self.K)) + self.a
+        self.gamma_rte = np.repeat(self.a/self.b1,self.K) + np.random.uniform(0,1, size = (self.U, self.K))
+        self.k_rte = self.a1/self.b1 + np.random.uniform(0,1, self.U)
+        self.k_shp = self.a1 + self.K*self.a
+
+        self.lambda_shp = np.random.uniform(0,1, size = (self.I, self.K)) + self.c
+        self.lambda_rte = np.repeat(self.c/self.d1,self.K) + np.random.uniform(0,1, size = (self.I, self.K))
+        self.tau_rte = self.c1/self.d1 + np.random.uniform(0,1, self.I)
+        self.tau_shp = self.c1 + self.K*self.c
+        # Note that the parameters tau_shp and k_shp are not updated in the algorithm, so they are declared here.
+
+        self.phi = np.zeros(shape=[self.U, self.I, self.K])
+
+
+
